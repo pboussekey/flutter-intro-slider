@@ -1,4 +1,20 @@
 import 'package:flutter/material.dart';
+class CustomBackgroundPainter extends CustomPainter {
+  Color color;
+  CustomBackgroundPainter({this.color});
+
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    Paint paint = Paint()..color = this.color;
+    canvas.drawCircle(Offset(size.width / 2.0, 0), size.width * 2.0, paint);
+  }
+
+  @override
+  bool shouldRepaint(CustomBackgroundPainter oldDelegate) {
+    return oldDelegate.color != this.color;
+  }
+}
 
 class IntroSlider extends StatefulWidget {
   /// An array of Slide object
@@ -461,11 +477,6 @@ class IntroSliderState extends State<IntroSlider>
           slides[i].colorEnd,
           slides[i].directionColorBegin,
           slides[i].directionColorEnd,
-          slides[i].backgroundImage,
-          slides[i].backgroundImageFit,
-          slides[i].backgroundOpacity,
-          slides[i].backgroundOpacityColor,
-          slides[i].backgroundBlendMode,
         ),
       );
     }
@@ -500,52 +511,27 @@ class IntroSliderState extends State<IntroSlider>
     Color colorEnd,
     AlignmentGeometry directionColorBegin,
     AlignmentGeometry directionColorEnd,
-
-    // Background image
-    String backgroundImage,
-    BoxFit backgroundImageFit,
-    double backgroundOpacity,
-    Color backgroundOpacityColor,
-    BlendMode backgroundBlendMode,
   ) {
     return Container(
       width: double.infinity,
       height: double.infinity,
-      decoration: backgroundImage != null
-          ? BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage(backgroundImage),
-                fit: backgroundImageFit ?? BoxFit.cover,
-                colorFilter: ColorFilter.mode(
-                  backgroundOpacityColor != null
-                      ? backgroundOpacityColor
-                          .withOpacity(backgroundOpacity ?? 0.5)
-                      : Colors.black.withOpacity(backgroundOpacity ?? 0.5),
-                  backgroundBlendMode ?? BlendMode.darken,
-                ),
-              ),
-            )
-          : BoxDecoration(
-              gradient: LinearGradient(
-                colors: backgroundColor != null
-                    ? [backgroundColor, backgroundColor]
-                    : [colorBegin, colorEnd],
-                begin: directionColorBegin ?? Alignment.topLeft,
-                end: directionColorEnd ?? Alignment.bottomRight,
-              ),
-            ),
+      decoration: BoxDecoration(color: Colors.white),
       child: ListView(
         children: <Widget>[
-          // Image or Center widget
           GestureDetector(
-            child: pathImage != null
-                ? Image.asset(
-              pathImage,
-              width: widthImage ?? 200.0,
-              height: heightImage ?? 200.0,
-              fit: BoxFit.contain,
-            )
-                : Center(child: centerWidget ?? Container()),
+            child: Stack(
+              children: <Widget>[
+                CustomPaint(
+                    painter: CustomBackgroundPainter(color: backgroundColor),
+                    size: Size(double.infinity, 300.0)),
+                Center(child: pathImage != null ? Image.asset(
+                  pathImage,
+                  width: widthImage ?? 200.0,
+                  height: heightImage ?? 200.0,
+                  fit: BoxFit.contain,
+                ) : Container(),),
+              ],
+            ),
             onTap: onCenterItemPress,
           ),
           Container(
@@ -563,7 +549,8 @@ class IntroSliderState extends State<IntroSlider>
               overflow: TextOverflow.ellipsis,
             ),
             margin: marginTitle ??
-                EdgeInsets.only(top: 70.0, bottom: 50.0, left: 20.0, right: 20.0),
+                EdgeInsets.only(
+                    top: 70.0, bottom: 50.0, left: 20.0, right: 20.0),
           ),
 
           // Description
