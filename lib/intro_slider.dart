@@ -536,6 +536,18 @@ class IntroSliderState extends State<IntroSlider>
             ),
       child: ListView(
         children: <Widget>[
+          // Image or Center widget
+          GestureDetector(
+            child: pathImage != null
+                ? Image.asset(
+              pathImage,
+              width: widthImage ?? 200.0,
+              height: heightImage ?? 200.0,
+              fit: BoxFit.contain,
+            )
+                : Center(child: centerWidget ?? Container()),
+            onTap: onCenterItemPress,
+          ),
           Container(
             // Title
             child: Text(
@@ -552,19 +564,6 @@ class IntroSliderState extends State<IntroSlider>
             ),
             margin: marginTitle ??
                 EdgeInsets.only(top: 70.0, bottom: 50.0, left: 20.0, right: 20.0),
-          ),
-
-          // Image or Center widget
-          GestureDetector(
-            child: pathImage != null
-                ? Image.asset(
-                    pathImage,
-                    width: widthImage ?? 200.0,
-                    height: heightImage ?? 200.0,
-                    fit: BoxFit.contain,
-                  )
-                : Center(child: centerWidget ?? Container()),
-            onTap: onCenterItemPress,
           ),
 
           // Description
