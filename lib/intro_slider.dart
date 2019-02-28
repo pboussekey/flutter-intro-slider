@@ -521,9 +521,9 @@ class IntroSliderState extends State<IntroSlider>
           GestureDetector(
             child: Stack(
               children: <Widget>[
-                CustomPaint(
+                ClipRect(child: CustomPaint(
                     painter: CustomBackgroundPainter(color: backgroundColor),
-                    size: Size(double.infinity, 300.0)),
+                    size: Size(double.infinity, 300.0)),),
                 Center(child: pathImage != null ? Image.asset(
                   pathImage,
                   width: widthImage ?? 200.0,
