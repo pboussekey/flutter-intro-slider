@@ -1,20 +1,5 @@
 import 'package:flutter/material.dart';
-class CustomBackgroundPainter extends CustomPainter {
-  Color color;
-  CustomBackgroundPainter({this.color});
-
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    Paint paint = Paint()..color = this.color;
-    canvas.drawCircle(Offset(size.width / 2.0, 0), size.width * 2.0, paint);
-  }
-
-  @override
-  bool shouldRepaint(CustomBackgroundPainter oldDelegate) {
-    return oldDelegate.color != this.color;
-  }
-}
+import 'background_painter.dart';
 
 class IntroSlider extends StatefulWidget {
   /// An array of Slide object
